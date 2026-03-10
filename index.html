@@ -24,12 +24,22 @@
       clamp(min, preferred, max): min at ~360px, max at ~1400px+
       All rem values relative to browser default 16px only.
     */
-    --font-label:        clamp(0.75rem, 0.75vw, 0.85rem);
-    --font-headline:     clamp(2.2rem,  3.2vw,  3.5rem);
-    --font-body:         clamp(1rem,    0.85vw, 1.1rem);
-    --font-section-title:clamp(1.8rem,  2.4vw,  2.8rem);
+    --font-label:        clamp(0.7rem,  0.75vw, 0.85rem);
+    --font-headline:     clamp(1.75rem, 3.2vw,  3.5rem);
+    --font-body:         clamp(0.9rem,  0.85vw, 1.1rem);
+    --font-section-title:clamp(1.5rem,  2.4vw,  2.8rem);
     --line-height-headline: 1.05;
     --line-height-body: 1.7;
+  }
+
+  /* Mobile font bump — overrides clamp mins on small screens only */
+  @media (max-width: 640px) {
+    :root {
+      --font-label:         0.8rem;
+      --font-headline:      2.4rem;
+      --font-body:          1.05rem;
+      --font-section-title: 1.9rem;
+    }
   }
 
   /* Breakpoints: 360 (XXS), 600 (XS), 640 (S), 740 (S landscape), 900 (M), 980, 1100 (L), 1400 (XL); + max-height 500px (compact landscape) */
