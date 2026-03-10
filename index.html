@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Elly Hizon · Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nav.css">
+<style>
+  :root {
+    --terracotta: #C8553D;
+    --saffron: #E8A838;
+    --teal: #2A7C78;
+    --teal-light: #3FA39E;
+    --plum: #4A1942;
+    --ivory: #F5EFE0;
+    --ivory-dark: #EDE4CE;
+    --charcoal: #1E1A18;
+    --warm-white: #FAF6EE;
+    --dusty-rose: #C47B6A;
+    --cobalt: #1B4E72;
+    /*
+      Typography tokens — fluid scale, no html font-size manipulation.
+      clamp(min, preferred, max): min at ~360px, max at ~1400px+
+      All rem values relative to browser default 16px only.
+    */
+    --font-label:        clamp(0.65rem, 1.2vw, 0.85rem);
+    --font-headline:     clamp(1.75rem, 5vw,   4.2rem);
+    --font-body:         clamp(0.9rem,  1.1vw,  1.1rem);
+    --font-section-title:clamp(1.5rem,  3.5vw,  2.8rem);
+    --line-height-headline: 1.05;
+    --line-height-body: 1.7;
+  }
+
+  /* Breakpoints: 360 (XXS), 600 (XS), 640 (S), 740 (S landscape), 900 (M), 980, 1100 (L), 1400 (XL); + max-height 500px (compact landscape) */
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--warm-white);
+    color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── HERO WRAPPER: full-bleed plum bg, caps inner grid ── */
+  .hero-wrap {
+    background: var(--plum);
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── HERO: exactly one viewport so first fold = plum, next scroll = rest ── */
+  .hero {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .hero-left {
+    background: var(--plum);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 0;
+    padding: clamp(2rem, 5vh, 8rem) 4rem clamp(2rem, 4vh, 6rem);
+    position: relative;
+  }
+
+  /* Moroccan tile pattern on left panel */
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40%;
+    background-image: 
+      radial-gradient(circle at 25px 25px, rgba(232,168,56,0.15) 2px, transparent 2px),
+      radial-gradient(circle at 75px 75px, rgba(232,168,56,0.1) 2px, transparent 2px),
+      radial-gradient(circle at 75px 25px, rgba(200,85,61,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 25px 75px, rgba(200,85,61,0.1) 1px, transparent 1px);
+    background-size: 100px 100px;
+    opacity: 0.8;
+  }
+
+  /* Decorative geometric border removed */
+
+  .hero-tag {
+    font-size: var(--font-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--font-headline);
+    font-weight: 900;
+    line-height: var(--line-height-headline);
+    color: var(--ivory);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.5s;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--saffron);
+  }
+
+  .hero-sub {
+    font-size: var(--font-body);
+    font-weight: 300;
+    line-height: var(--line-height-body);
+    color: rgba(245,239,224,0.7);
+    max-width: 810px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.7s;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--terracotta);
+    color: var(--ivory);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.9s;
+    width: fit-content;
+  }
+
+  .hero-cta:hover {
+    background: var(--saffron);
+    color: var(--charcoal);
+    transform: translateX(4px);
+  }
+
+  .hero-cta::after {
+    content: '→';
+    transition: transform 0.2s;
+  }
+
+  .hero-cta:hover::after { transform: translateX(4px); }
+
+  .hero-right {
+    background: var(--warm-white);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  /* Crop to table line (hide Gemini star); image slightly taller so visible part fills area, no blank strip */
+  .hero-right .hero-image {
+    width: 100%;
+    height: 110%;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    clip-path: inset(0 0 9% 0);
+    -webkit-clip-path: inset(0 0 9% 0);
+  }
+
+  /* Subtle overlay to harmonize image with site palette */
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--plum);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  /* Hero responsive: stack on small portrait screens; landscape phones handled by max-height rule */
+  @media (max-width: 900px) and (orientation: portrait) {
+    .hero-wrap {
+      height: auto;
+      min-height: auto;
+      max-height: none;
+    }
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-rows: 100vh auto;
+      height: auto;
+      min-height: auto;
+      max-height: none;
+    }
+    .hero-left {
+      padding: clamp(1.5rem, 4vh, 4rem) 1.25rem clamp(1.5rem, 3vh, 3rem);
+    }
+    .hero-right {
+      width: 100%;
+      height: 50vh;
+      min-height: 50vh;
+      overflow: hidden;
+    }
+    .hero-right .hero-image {
+      height: 110%;
+      max-height: none;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .hero-cta {
+      padding: 0.65rem 1.25rem;
+      font-size: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .scroll-hint {
+      bottom: 1.5rem;
+      font-size: 0.65rem;
+    }
+    .scroll-hint span { font-size: 1rem; }
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(245,239,224,0.4);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: float 2s ease-in-out infinite;
+    z-index: 10;
+  }
+
+  .scroll-hint span { font-size: 1.2rem; }
+
+  /* ── CHAPTER INTRO STRIP ── */
+  .chapter-strip {
+    background: var(--saffron);
+    padding: 1.5rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    overflow: hidden;
+  }
+
+  .chapter-strip-text {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    animation: marquee 20s linear infinite;
+    display: flex;
+    gap: 4rem;
+  }
+
+  .chapter-strip-text span { opacity: 0.5; }
+
+  /* ── ABOUT / STORY SECTION ── */
+  .story {
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto 1fr;
+    gap: 2rem 6rem;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .story-label {
+    grid-column: 1 / -1;
+    font-size: var(--font-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    padding-top: 0.5rem;
+  }
+
+  #polaroid-stack {
+    position: relative;
+    width: 100%;
+    height: 680px;
+    margin-top: 0;
+  }
+  #polaroid-stack .polaroid {
+    position: absolute;
+    width: 312px;
+    top: 0;
+    left: 10px;
+    transform-origin: center top;
+    transition: transform 0.75s cubic-bezier(0.34, 1.3, 0.64, 1);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  }
+  #polaroid-stack .polaroid:nth-child(1) {
+    clip-path: inset(12% 17% 21% 20% round 3px);
+    transform: rotate(-6deg); z-index: 3; transition-delay: 0s;
+  }
+  #polaroid-stack .polaroid:nth-child(2) {
+    clip-path: inset(15% 17% 18% 18% round 3px);
+    transform: rotate(2deg); z-index: 2; transition-delay: 0.1s;
+  }
+  #polaroid-stack .polaroid:nth-child(3) {
+    clip-path: inset(15% 16% 21% 18% round 3px);
+    transform: rotate(9deg); z-index: 1; transition-delay: 0.2s;
+  }
+  #polaroid-stack.fanned .polaroid:nth-child(1) { transform: rotate(-10deg) translate(-57px, 15px); }
+  #polaroid-stack.fanned .polaroid:nth-child(2) { transform: rotate(-1deg)   translate(-75px, 261px); }
+  #polaroid-stack.fanned .polaroid:nth-child(3) { transform: rotate(20deg) translate(200px, 510px); }
+
+  /* Carousel: hidden on desktop */
+  .polaroid-carousel-viewport { overflow: visible; }
+  .carousel-prev,
+  .carousel-next { display: none; }
+
+  /* Story + polaroids: 980px–641px single column, polaroid ROW; ≤640px stacked */
+  @media (max-width: 980px) {
+    .story {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+      padding: 4rem 1.25rem 3rem;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      gap: 1rem;
+    }
+    .story-label { order: 1; width: 100%; box-sizing: border-box; }
+    .story-content {
+      order: 2;
+      flex: 0 0 auto;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    .story-content h2,
+    .story-content p {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .story-content p {
+      overflow-wrap: anywhere;
+      word-wrap: break-word;
+      word-break: break-word;
+      max-width: none;
+    }
+    .polaroid-carousel {
+      order: 3;
+      position: relative;
+      width: 100%;
+      margin: 0;
+      padding: 1.5rem 1.25rem 2rem;
+      background: var(--warm-white);
+      overflow: visible;
+      box-sizing: border-box;
+    }
+    .polaroid-carousel-viewport {
+      overflow: visible;
+      width: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0.75rem;
+      min-height: 200px;
+    }
+    /* 641px–980px: horizontal row of 3 polaroids (they fit, no carousel) */
+    #polaroid-stack {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0.75rem;
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+    #polaroid-stack .polaroid {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: clamp(120px, 26vw, 200px);
+      flex-shrink: 0;
+      transform: none !important;
+      transition: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    #polaroid-stack .polaroid:nth-child(1),
+    #polaroid-stack .polaroid:nth-child(2),
+    #polaroid-stack .polaroid:nth-child(3) {
+      margin: 0;
+    }
+    #polaroid-stack.fanned .polaroid:nth-child(1),
+    #polaroid-stack.fanned .polaroid:nth-child(2),
+    #polaroid-stack.fanned .polaroid:nth-child(3) {
+      transform: none !important;
+    }
+    .carousel-prev,
+    .carousel-next { display: none !important; }
+  }
+
+  /* Compact portrait only: stacked polaroids */
+  @media (max-width: 640px) {
+    .polaroid-carousel-viewport {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 320px;
+    }
+    #polaroid-stack {
+      display: block;
+      position: relative;
+      width: 220px;
+      height: 320px;
+      margin: 0 auto;
+    }
+    #polaroid-stack .polaroid {
+      position: absolute;
+      width: 220px;
+      top: 0;
+      left: 50%;
+      margin-left: -110px;
+      flex-shrink: 0;
+      transform-origin: center top;
+      transition: transform 0.4s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    #polaroid-stack .polaroid:nth-child(1) {
+      z-index: 3;
+      transform: rotate(-8deg) translateY(0);
+    }
+    #polaroid-stack .polaroid:nth-child(2) {
+      z-index: 2;
+      transform: rotate(4deg) translateY(45px);
+    }
+    #polaroid-stack .polaroid:nth-child(3) {
+      z-index: 1;
+      transform: rotate(-4deg) translateY(90px);
+    }
+    #polaroid-stack.fanned .polaroid:nth-child(1) { transform: rotate(-8deg) translateY(0); }
+    #polaroid-stack.fanned .polaroid:nth-child(2) { transform: rotate(4deg) translateY(45px); }
+    #polaroid-stack.fanned .polaroid:nth-child(3) { transform: rotate(-4deg) translateY(90px); }
+  }
+
+  .story-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--font-headline);
+    font-weight: 700;
+    line-height: var(--line-height-headline);
+    margin-bottom: 2rem;
+    color: var(--charcoal);
+  }
+
+  .story-content h2 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .story-content p {
+    font-size: var(--font-body);
+    font-weight: 300;
+    line-height: var(--line-height-body);
+    color: rgba(30,26,24,0.75);
+    margin-bottom: 1.5rem;
+    max-width: min(620px, 100%);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  @media (max-width: 980px) {
+    .story-content p { max-width: 100%; }
+  }
+
+  .story-content p strong {
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  /* ── SKILLS MOSAIC ── */
+  .mosaic {
+    background: var(--charcoal);
+    padding: 6rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mosaic-inner {
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mosaic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(232,168,56,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,168,56,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .mosaic-header {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--font-section-title);
+    font-style: italic;
+    color: var(--ivory);
+    margin-bottom: 4rem;
+    max-width: 500px;
+  }
+
+  .mosaic-header strong {
+    font-style: normal;
+    color: var(--saffron);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(245,239,224,0.12);
+  }
+
+  .skill-tile {
+    background: rgba(0,0,0,0.25);
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(245,239,224,0.15);
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-tile::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .skill-tile:nth-child(1)::before { background: var(--terracotta); }
+  .skill-tile:nth-child(2)::before { background: var(--saffron); }
+  .skill-tile:nth-child(3)::before { background: var(--teal-light); }
+  .skill-tile:nth-child(4)::before { background: var(--dusty-rose); }
+  .skill-tile:nth-child(5)::before { background: var(--cobalt); }
+  .skill-tile:nth-child(6)::before { background: var(--terracotta); }
+  .skill-tile:nth-child(7)::before { background: var(--saffron); }
+  .skill-tile:nth-child(8)::before { background: var(--teal-light); }
+
+  .skill-tile:hover::before { width: 100%; }
+
+  .skill-tile:hover { background: rgba(245,239,224,0.03); }
+
+  .skill-number {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(245,239,224,0.2);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .skill-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--ivory);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .skill-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(245,239,224,0.45);
+  }
+
+  /* ── WORK SECTION ── */
+  .work {
+    padding: 8rem 4rem;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(30,26,24,0.1);
+    padding-bottom: 2rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--font-section-title);
+    font-weight: 900;
+    color: var(--charcoal);
+  }
+
+  .section-link {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.2s;
+  }
+
+  .section-link:hover { gap: 1rem; }
+
+  .case-studies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  /* Last two cards span to 3-col on wider screens */
+  @media (min-width: 1100px) {
+    .case-studies {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .case-study:nth-child(1),
+    .case-study:nth-child(2) {
+      grid-column: span 1;
+    }
+  }
+
+  .case-study {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 2px;
+    aspect-ratio: 4/3;
+    background: var(--charcoal);
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Thumbnail image - swap src for real screenshots */
+  .case-thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, opacity 0.4s ease;
+    opacity: 0.75;
+  }
+
+  /* Colour placeholder until real thumbnails exist */
+  .case-thumb-placeholder {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s ease;
+  }
+
+  .case-study:nth-child(1) .case-thumb-placeholder {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--cobalt) 100%);
+  }
+  .case-study:nth-child(2) .case-thumb-placeholder {
+    background: linear-gradient(135deg, var(--plum) 0%, var(--terracotta) 100%);
+  }
+  .case-study:nth-child(3) .case-thumb-placeholder {
+    background: linear-gradient(135deg, var(--saffron) 0%, var(--dusty-rose) 100%);
+  }
+  .case-study:nth-child(4) .case-thumb-placeholder {
+    background: linear-gradient(135deg, var(--cobalt) 0%, var(--teal) 100%);
+  }
+
+  .case-study:hover .case-thumb,
+  .case-study:hover .case-thumb-placeholder {
+    transform: scale(1.04);
+  }
+
+  /* Gradient overlay for text legibility */
+  .case-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(20,16,14,0.92) 0%,
+      rgba(20,16,14,0.4) 50%,
+      rgba(20,16,14,0.05) 100%
+    );
+    transition: background 0.4s ease;
+  }
+
+  .case-study:hover .case-overlay {
+    background: linear-gradient(
+      to top,
+      rgba(20,16,14,0.96) 0%,
+      rgba(20,16,14,0.5) 55%,
+      rgba(20,16,14,0.1) 100%
+    );
+  }
+
+  .case-study-meta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.5rem;
+    z-index: 2;
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+  }
+
+  .case-tag {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 0.6rem;
+  }
+
+  .case-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .case-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(245,239,224,0.65);
+    margin-bottom: 1.25rem;
+    max-width: 340px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease 0.05s, transform 0.4s ease 0.05s;
+  }
+
+  .case-study:hover .case-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .case-stat {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--ivory);
+    line-height: 1;
+  }
+
+  .case-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.4);
+    margin-top: 0.25rem;
+  }
+
+  .case-arrow {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(245,239,224,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ivory);
+    font-size: 1rem;
+    opacity: 0;
+    transform: translate(4px, -4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2;
+  }
+
+  .case-study:hover .case-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* ── QUOTE SECTION ── */
+  .quote-section {
+    background: var(--teal);
+    padding: 7rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-section::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    color: rgba(245,239,224,0.07);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ivory);
+    margin-bottom: 2.5rem;
+  }
+
+  .quote-attribution {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.5);
+  }
+
+  /* ── FOOTER INVITATION ── */
+  .footer-invite-wrapper {
+    background: var(--plum);
+    padding: 8rem 4rem;
+  }
+
+  .footer-invite {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .invite-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--font-section-title);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--ivory);
+  }
+
+  .invite-text h2 em {
+    font-style: italic;
+    color: var(--saffron);
+  }
+
+  .invite-text p {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(245,239,224,0.65);
+    margin-bottom: 2.5rem;
+  }
+
+  .invite-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .invite-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(245,239,224,0.2);
+    text-decoration: none;
+    color: var(--ivory);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+  }
+
+  .invite-link:hover {
+    background: var(--saffron);
+    color: var(--charcoal);
+    border-color: var(--saffron);
+    transform: translateX(6px);
+  }
+
+  .invite-link-arrow { font-size: 1.1rem; }
+
+  /* ── BACK TO TOP (semi-transparent + dark outline so it doesn’t block text on light areas) ── */
+  .back-to-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 99;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(30, 26, 24, 0.12);
+    color: var(--charcoal);
+    text-decoration: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    border: 2px solid var(--charcoal);
+    box-shadow: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .back-to-top.visible {
+    opacity: 0.7;
+    visibility: visible;
+  }
+  .back-to-top:hover {
+    transform: translateY(-3px);
+    background: rgba(30, 26, 24, 0.25);
+    color: var(--charcoal);
+  }
+  /* Over plum / charcoal / teal: light outline + ivory arrow so it’s visible on dark */
+  .back-to-top.back-to-top-over-dark {
+    background: rgba(245, 239, 224, 0.15);
+    color: var(--ivory);
+    border-color: rgba(245, 239, 224, 0.7);
+  }
+  .back-to-top.back-to-top-over-dark:hover {
+    background: rgba(245, 239, 224, 0.28);
+    color: var(--ivory);
+    border-color: var(--ivory);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal);
+    padding: 2.5rem 4rem;
+  }
+
+  .footer-inner {
+    max-width: 1920px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ivory);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .footer-name .nav-avatar {
+    background: rgba(245,239,224,0.15);
+    color: var(--ivory);
+    opacity: 1;
+  }
+  .footer-name .nav-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 28%;
+    transform: scale(1.7);
+    transform-origin: 50% 15%;
+  }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(245,239,224,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── DECORATIVE ZELLIGE STRIP ── */
+  .zellige-strip {
+    height: 8px;
+    background: linear-gradient(90deg, 
+      var(--terracotta) 0%, 
+      var(--saffron) 20%, 
+      var(--teal) 40%, 
+      var(--plum) 60%, 
+      var(--terracotta) 80%,
+      var(--saffron) 100%
+    );
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-25%); }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── AWARDS STRIP ── */
+  .awards-strip {
+    background: var(--charcoal);
+    padding: 4rem;
+    border-top: 1px solid rgba(245,239,224,0.06);
+  }
+
+  .awards-inner {
+    max-width: 1920px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .award-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .award-icon {
+    color: var(--saffron);
+    font-size: 1.2rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .award-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ivory);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+
+  .award-meta {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: rgba(245,239,224,0.4);
+    line-height: 1.5;
+  }
+
+  .award-divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(245,239,224,0.1);
+    flex-shrink: 0;
+  }
+
+  /* ── WHAT PEOPLE SAY ── */
+  .voices {
+    background: var(--ivory-dark);
+    padding: 8rem 4rem;
+  }
+
+  .voices-inner {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .voices-header {
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(30,26,24,0.1);
+    padding-bottom: 2rem;
+  }
+
+  .voices-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  @media (max-width: 1100px) {
+    .voices-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .voice-card {
+    background: var(--warm-white);
+    padding: 2.5rem;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .voice-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(30,26,24,0.08);
+  }
+
+  .voice-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--saffron);
+    opacity: 0.25;
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .voice-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--charcoal);
+    margin-bottom: 2rem;
+    padding-top: 1.5rem;
+    flex-grow: 1;
+  }
+
+
+  /* ── VOICE AVATARS ── */
+  .voice-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--ivory-dark);
+  }
+
+  .voice-person {
+    border-top: 1px solid rgba(30,26,24,0.08);
+    padding-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .voice-person-text { display: flex; flex-direction: column; }
+
+
+  .voice-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 0.2rem;
+  }
+
+  .voice-role {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: rgba(30,26,24,0.5);
+    letter-spacing: 0.04em;
+  }
+
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* ── GLOBAL RESPONSIVE (900px) ── */
+  @media (max-width: 900px) {
+    .chapter-strip { padding: 1rem 1.25rem; }
+    .chapter-strip-text { font-size: 0.65rem; gap: 2rem; }
+    .awards-strip { padding: 2.5rem 1.25rem; }
+    .awards-inner { gap: 2rem; }
+    .award-item { min-width: 200px; }
+    .award-divider { display: none; }
+    .mosaic { padding: 3rem 1.25rem 5rem; }
+    .mosaic-inner { padding: 0; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .skill-tile { padding: 1.5rem 1.25rem; }
+    .mosaic-header { margin-bottom: 2.5rem; }
+    .work { padding: 5rem 1.25rem; }
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .case-studies { grid-template-columns: 1fr; gap: 1.5rem; }
+    .quote-section { padding: 4rem 1.25rem; }
+    .quote-section::before { font-size: 12rem; left: 1rem; }
+    .quote-inner { padding: 0 0.5rem; }
+    .footer-invite-wrapper { padding: 5rem 1.25rem; }
+    .voices { padding: 5rem 1.25rem; }
+    .footer-invite {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .invite-text h2 { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+    footer { padding: 2rem 1.25rem; }
+    .footer-inner {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+
+  /* -- PHONE LANDSCAPE (max-height: 500px, e.g. iPhone 14 Pro Max landscape 932x430) -- */
+  @media (max-height: 500px) {
+    .hero-wrap {
+      height: 100vh;
+      min-height: 100vh;
+      max-height: 100vh;
+    }
+    .hero {
+      height: 100%;
+      grid-template-columns: 1fr 1fr;
+    }
+    .hero-left {
+      /* Centre content vertically, top padding clears the nav */
+      padding: 3.5rem 1.5rem 1rem;
+      justify-content: center;
+    }
+    .hero-right {
+      height: 100%;
+      min-height: 100%;
+    }
+    .hero-right .hero-image {
+      height: 110%;
+      object-fit: cover;
+      object-position: top center;
+      clip-path: inset(0 0 9% 0);
+      -webkit-clip-path: inset(0 0 9% 0);
+    }
+    /* Scale fonts to viewport HEIGHT so they fit the short landscape screen */
+    .hero-tag  { font-size: clamp(0.55rem, 1.8vh, 0.75rem); margin-bottom: 0.3rem; }
+    .hero-headline {
+      font-size: clamp(1.1rem, 5vh, 1.8rem);
+      line-height: var(--line-height-headline);
+      margin-bottom: 0.4rem;
+    }
+    .hero-sub {
+      font-size: clamp(0.72rem, 1.8vh, 0.88rem);
+      line-height: var(--line-height-body);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hero-cta { padding: 0.4rem 0.9rem; font-size: 0.68rem; margin-bottom: 0; }
+    .scroll-hint { display: none; }
+  }
+
+  /* -- SHORT PORTRAIT HEIGHT (e.g. iPhone SE 375x667): trim hero so CTA stays in view -- */
+  @media (max-height: 700px) and (orientation: portrait) {
+    .hero-left {
+      padding: clamp(1rem, 3vh, 3rem) 1.25rem clamp(1rem, 2vh, 2rem);
+    }
+    .hero-tag { margin-bottom: 0.75rem; }
+    .hero-headline { margin-bottom: 1rem; }
+    .hero-sub { margin-bottom: 1.25rem; }
+    .hero-cta { margin-bottom: 0.5rem; }
+    .scroll-hint { bottom: 0.5rem; }
+    .scroll-hint span { font-size: 0.85rem; }
+  }
+
+  /* -- VERY SHORT LANDSCAPE (e.g. 740x360): compress hero content -- */
+  @media (max-width: 740px) and (max-height: 400px) {
+    .hero-left {
+      padding: 3.5rem 0.75rem 0.75rem;
+      justify-content: flex-start;
+    }
+    .hero-tag { margin-bottom: 0.4rem; }
+    .hero-headline { margin-bottom: 0.5rem; line-height: 1.15; }
+    .hero-sub {
+      margin-bottom: 0.6rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hero-cta { padding: 0.4rem 0.75rem; margin-bottom: 0.25rem; }
+    .scroll-hint { display: none; }
+  }
+
+  /* -- SMALL PHONES (<=600px): layout tweaks only, tokens already fluid -- */
+  @media (max-width: 600px) {
+    .hero-left { padding: 5rem 1rem 3rem; }
+    .hero-cta { padding: 0.5rem 1rem; margin-bottom: 1rem; }
+    .scroll-hint { bottom: 1rem; }
+    .hero-sub { max-width: 100%; }
+    .award-item { min-width: 100%; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .voices { padding: 5rem 1.25rem; }
+    .voices-grid { grid-template-columns: 1fr; }
+    .voice-card { padding: 1.75rem; }
+    .case-study-meta { padding: 1.5rem; }
+    .case-desc { max-width: 100%; }
+  }
+
+  /* -- XXS (<=360px, e.g. Galaxy S8): extra breathing room -- */
+  @media (max-width: 360px) {
+    .hero-left { padding: 5.5rem 0.75rem 2rem; }
+    .hero-cta { padding: 0.5rem 0.85rem; margin-bottom: 0.75rem; }
+    .scroll-hint { bottom: 0.75rem; }
+  }
+
+  /* -- XL (>=1400px): structural spacing only, tokens already fluid -- */
+  @media (min-width: 1400px) {
+    :root { --line-height-body: 1.75; }
+    .hero { align-items: stretch; }
+    .hero-left { padding: clamp(2rem, 5vh, 6rem) 5rem clamp(2rem, 4vh, 6rem); }
+    .hero-tag { margin-bottom: 1.75rem; }
+    .hero-headline { margin-bottom: 2.25rem; }
+    .hero-sub { max-width: 810px; margin-bottom: 3.5rem; }
+    .hero-cta { padding: 1.15rem 2.25rem; }
+    .story { padding: 10rem 5rem; gap: 2rem 7rem; }
+    .story-content p { line-height: 1.9; }
+    .mosaic { padding: 8rem 5rem; }
+    .mosaic-inner { padding: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-content">
+    <div class="nav-logo">
+      <div class="nav-avatar"><img src="elly avatar.png" alt="Elly"></div>
+      Elly Hizon
+    </div>
+    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#art">Art</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#voices">Kudos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-wrap">
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Principal Product Designer · Sydney</p>
+    <h1 class="hero-headline">
+      Hi, I'm Elly.<br>
+      I talk too much<br>
+      and <em>think even more.</em>
+    </h1>
+    <p class="hero-sub">
+      19 years of designing, building, and shipping. 
+      SAFe certified. CSPO certified. Part designer, part product manager, full-time dot connector.
+    </p>
+    <a href="#work" class="hero-cta">See the work</a>
+  </div>
+
+  <div class="hero-right">
+    <img src="hero_image.png" alt="" class="hero-image">
+  </div>
+</section>
+</div><!-- /.hero-wrap -->
+
+<!-- ZELLIGE COLOUR STRIP -->
+<div class="zellige-strip"></div>
+
+<!-- AWARDS STRIP -->
+<section class="awards-strip">
+  <div class="awards-inner">
+    <div class="award-item reveal">
+      <div class="award-icon">✦</div>
+      <div class="award-content">
+        <div class="award-title">Best Digital Banking Initiative</div>
+        <div class="award-meta">Saving Spaces · Global Retail Banking Innovation Awards · 2025</div>
+      </div>
+    </div>
+    <div class="award-divider"></div>
+    <div class="award-item reveal reveal-delay-1">
+      <div class="award-icon">✦</div>
+      <div class="award-content">
+        <div class="award-title">Digital Interface Winner</div>
+        <div class="award-meta">NAB Now Pay Later · Good Design Awards · 2024</div>
+      </div>
+    </div>
+    <div class="award-divider"></div>
+    <div class="award-item reveal reveal-delay-2">
+      <div class="award-icon">✦</div>
+      <div class="award-content">
+        <div class="award-title">Website People's Choice Finalist</div>
+        <div class="award-meta">Zenogias.com · Philippine Web Awards · 1998 · Solo project</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="chapter-strip">
+  <div class="chapter-strip-text" aria-hidden="true">
+    <span>Product Design</span> ✦ <span>Product Management</span> ✦ <span>Research</span> ✦ <span>Storytelling</span> ✦ <span>AI Integration</span> ✦ <span>Design Systems</span> ✦
+    <span>Product Design</span> ✦ <span>Product Management</span> ✦ <span>Research</span> ✦ <span>Storytelling</span> ✦ <span>AI Integration</span> ✦ <span>Design Systems</span> ✦
+    <span>Product Design</span> ✦ <span>Product Management</span> ✦ <span>Research</span> ✦ <span>Storytelling</span> ✦ <span>AI Integration</span> ✦ <span>Design Systems</span> ✦
+    <span>Product Design</span> ✦ <span>Product Management</span> ✦ <span>Research</span> ✦ <span>Storytelling</span> ✦ <span>AI Integration</span> ✦ <span>Design Systems</span> ✦
+  </div>
+</div>
+
+<!-- STORY / ABOUT -->
+<section class="story" id="about">
+  <div class="story-label reveal">THE STORY SO FAR</div>
+  <div class="polaroid-carousel">
+    <div class="polaroid-carousel-viewport">
+      <div id="polaroid-stack">
+        <img class="polaroid" src="polaroid1.png" alt="Home Office Hustle" />
+        <img class="polaroid" src="polaroid 3.png" alt="Team Huddle & Pitching" />
+        <img class="polaroid" src="polaroid 2.png" alt="Inspiration Strikes in the Park" />
+      </div>
+    </div>
+    <button type="button" class="carousel-prev is-hidden" aria-label="Previous polaroid">←</button>
+    <button type="button" class="carousel-next" aria-label="Next polaroid">→</button>
+  </div>
+  <div class="story-content">
+    <h2 class="reveal">I've lived <em>many lives.</em><br>All of them useful.</h2>
+    <p class="reveal reveal-delay-1">
+      I started in editorial and web design, taught myself code in the early 2000s, and ran a Xenogears fan site that somehow became a <strong>Webby Awards finalist</strong>. That accidental career has taken me through UX design, front-end dev, product management, and back to design again, across <strong>Oracle Aconex</strong>, HardHat, and now <strong>NAB</strong>, one of Australia's Big Four banks, where I'm a <strong>Principal Product Designer</strong> leading Digital Wallets, Financial Wellbeing, and Credit Card Servicing.
+    </p>
+    <p class="reveal reveal-delay-2">
+      The hybrid is the thing. I've actually sat on the <strong>Product Management seat</strong> for around five years. I owned backlogs, written roadmaps, managed stakeholders. So when I design, I follow the same systems thinking amplified by <strong>customer obsession</strong> and <strong>tech knowledge</strong>, making me a truly <strong>strategic product professional</strong>.
+    </p>
+    <p class="reveal reveal-delay-3">
+      Off the clock, I draw <strong>comics</strong>, paint <strong>digital illustrations</strong>, write <strong>fiction</strong>, and lose hours to Souls games. I'm a certified movie nerd and chronic fandom tracker. Ask me when there's a new season, a hot take, or a weird product launch, I've probably already clocked it. I share my home office with <strong>Quincy</strong>, a Russian Blue who supervises my work from a distance and has strong opinions about my monitor placement.
+    </p>
+  </div>
+</section>
+
+<!-- SKILLS MOSAIC -->
+<section class="mosaic">
+  <div class="mosaic-inner">
+  <h2 class="mosaic-header reveal">What I bring<strong> to the table</strong></h2>
+  <div class="skills-grid">
+    <div class="skill-tile reveal">
+      <div class="skill-number">01</div>
+      <div class="skill-name">The Hybrid Advantage</div>
+      <div class="skill-desc">CSPO + SAFe 5 certified. I own the backlog, manage the roadmap, and bring principal-level design craft to both sides of the room.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-1">
+      <div class="skill-number">02</div>
+      <div class="skill-name">Outcome Engineering</div>
+      <div class="skill-desc">Doubled organic conversion rates in under 2 months. 27.8% organic feature adoption. I don't just design interfaces. I engineer results.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-2">
+      <div class="skill-number">03</div>
+      <div class="skill-name">Data-Backed Storytelling</div>
+      <div class="skill-desc">Product Experience Canvases, stakeholder decks, executive comms. Complex problems translated into strategies that actually move teams.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-3">
+      <div class="skill-number">04</div>
+      <div class="skill-name">AI & Vibe Coding</div>
+      <div class="skill-desc">Claude, Cursor, Copilot, MCP integrations. Prototyping, building systems, and accelerating delivery end to end. Not just talking about it.</div>
+    </div>
+    <div class="skill-tile reveal">
+      <div class="skill-number">05</div>
+      <div class="skill-name">CX & UX Strategy</div>
+      <div class="skill-desc">Service design, research, and systems thinking across B2C and B2B. From ethnographic field research to shipped fintech at scale.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-1">
+      <div class="skill-number">06</div>
+      <div class="skill-name">Design Operations</div>
+      <div class="skill-desc">Figma onboarding, design systems, team mentorship. The infrastructure that lets good design happen consistently.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-2">
+      <div class="skill-number">07</div>
+      <div class="skill-name">Stakeholder Alignment</div>
+      <div class="skill-desc">Engineering, Product, Executives. I build the bridges between them using visual narratives that make the path forward obvious.</div>
+    </div>
+    <div class="skill-tile reveal reveal-delay-3">
+      <div class="skill-number">08</div>
+      <div class="skill-name">Creative Direction</div>
+      <div class="skill-desc">Illustration, digital art, editorial instincts. A genuine point of view on craft that shows up in every pixel.</div>
+    </div>
+    </div>
+  </div><!-- /.mosaic-inner -->
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="section-header reveal">
+    <h2 class="section-title">Selected work</h2>
+    <a href="#" class="section-link">All case studies →</a>
+  </div>
+
+  <div class="case-studies">
+
+    <a class="case-study reveal" href="aconex-punchlists.html">
+      <div class="case-thumb-placeholder"></div>
+      <!-- <img class="case-thumb" src="aconex-punchlists.jpg" alt="Aconex Punchlists"> -->
+      <div class="case-overlay"></div>
+      <div class="case-arrow">↗</div>
+      <div class="case-study-meta">
+        <div class="case-tag">Oracle Aconex · Field Research · UX Design</div>
+        <h3 class="case-title">Aconex Punchlists</h3>
+        <p class="case-desc">To design a better experience for site supervisors, I went to an actual Multiplex construction site and witnessed a day in their life firsthand.</p>
+        <div class="case-stat">On-site</div>
+        <div class="case-stat-label">Ethnographic field research</div>
+      </div>
+    </a>
+
+    <div class="case-study reveal reveal-delay-1">
+      <div class="case-thumb-placeholder"></div>
+      <!-- <img class="case-thumb" src="cash-predictions.jpg" alt="Cash Predictions"> -->
+      <div class="case-overlay"></div>
+      <div class="case-arrow">↗</div>
+      <div class="case-study-meta">
+        <div class="case-tag">NAB · Live Product · AI Features</div>
+        <h3 class="case-title">Cash Predictions</h3>
+        <p class="case-desc">Giving Australians a window into their financial future, surfacing intelligent cashflow forecasts inside NAB Mobile.</p>
+        <div class="case-stat">Live</div>
+        <div class="case-stat-label">NAB Mobile · App Store now</div>
+      </div>
+    </div>
+
+    <div class="case-study reveal reveal-delay-2">
+      <div class="case-thumb-placeholder"></div>
+      <!-- <img class="case-thumb" src="card-credentials.jpg" alt="Card Credentials"> -->
+      <div class="case-overlay"></div>
+      <div class="case-arrow">↗</div>
+      <div class="case-study-meta">
+        <div class="case-tag">NAB · Live Product · Cards</div>
+        <h3 class="case-title">Less Plastic, More Control</h3>
+        <p class="case-desc">Digital Card Credentials and Plastic Card Suppression, rethinking how NAB customers manage their cards in a digital-first world.</p>
+        <div class="case-stat">27.8%</div>
+        <div class="case-stat-label">Organic feature adoption</div>
+      </div>
+    </div>
+
+    <div class="case-study reveal reveal-delay-3">
+      <div class="case-thumb-placeholder"></div>
+      <!-- <img class="case-thumb" src="ai-tooling.jpg" alt="AI Tooling"> -->
+      <div class="case-overlay"></div>
+      <div class="case-arrow">↗</div>
+      <div class="case-study-meta">
+        <div class="case-tag">AI · Design Tooling · Process</div>
+        <h3 class="case-title">Designing with AI</h3>
+        <p class="case-desc">How I used Cursor and Copilot to build HTML presentations and design newsletters. Shipping in hours, not days.</p>
+        <div class="case-stat">3×</div>
+        <div class="case-stat-label">Faster delivery</div>
+      </div>
+    </div>
+
+    <a class="case-study reveal reveal-delay-2" href="aconex-id.html">
+      <div class="case-thumb-placeholder"></div>
+      <!-- <img class="case-thumb" src="aconex-id.jpg" alt="Aconex ID"> -->
+      <div class="case-overlay"></div>
+      <div class="case-arrow">↗</div>
+      <div class="case-study-meta">
+        <div class="case-tag">Aconex · Enterprise · Identity</div>
+        <h3 class="case-title">Aconex ID</h3>
+        <p class="case-desc">Redesigning identity and authentication for one of the world's largest construction management platforms.</p>
+        <div class="case-stat">Global</div>
+        <div class="case-stat-label">Enterprise scale · Millions of users</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-inner">
+    <p class="quote-text reveal">
+      "I create clarity in ambiguity. I blend systems thinking with design thinking, 
+      and I help teams move quickly while staying anchored to what customers actually need."
+    </p>
+    <p class="quote-attribution reveal reveal-delay-1">From the work, not the pitch deck</p>
+  </div>
+</section>
+
+<!-- WHAT PEOPLE SAY -->
+<section class="voices" id="voices">
+  <div class="voices-inner">
+    <div class="voices-header reveal">
+      <h2 class="section-title">What People Say</h2>
+    </div>
+    <div class="voices-grid">
+
+      <div class="voice-card reveal">
+        <div class="voice-quote">"Elly was instrumental in redefining the business' online products and associated goals and processes. From new product launch to web site design; in every case Elly's work was of the highest standard."</div>
+        <div class="voice-person"><img class="voice-avatar" src="data:image/png;base64,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" alt="Duncan Walton"><div class="voice-person-text"><div class="voice-name">Duncan Walton</div><div class="voice-role">IT Director</div></div></div>
+      </div>
+
+      <div class="voice-card reveal reveal-delay-1">
+        <div class="voice-quote">"Elly is a talented and cutting edge product development professional. She is a new product visionary along with being a talented manager of all that is existing. Unquestionably one of the best I've worked with."</div>
+        <div class="voice-person"><img class="voice-avatar" src="data:image/png;base64,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" alt="John Leahy"><div class="voice-person-text"><div class="voice-name">John Leahy</div><div class="voice-role">Head of Global Marketing · Berlitz Corporation</div></div></div>
+      </div>
+
+      <div class="voice-card reveal reveal-delay-2">
+        <div class="voice-quote">"Elly never runs out of innovative ideas to bring our websites to new heights. Her keen sense of design and user experience has tremendously benefited our social media and customer review generation programs."</div>
+        <div class="voice-person"><img class="voice-avatar" src="data:image/png;base64,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" alt="Marvin Sanchez"><div class="voice-person-text"><div class="voice-name">Marvin Sanchez</div><div class="voice-role">Director of Content Marketing · CarParts.com</div></div></div>
+      </div>
+
+      <div class="voice-card reveal reveal-delay-3">
+        <div class="voice-quote">"Elly is a first class specialist at what she does. Her knowledge of UX and web content management completely transformed our online product offering. A professional through and through. I would recommend her to any employer looking to raise their online product management to the next level."</div>
+        <div class="voice-person"><img class="voice-avatar" src="data:image/png;base64,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" alt="Jasmina Majdis"><div class="voice-person-text"><div class="voice-name">Jasmina Majdis (Dugalic)</div><div class="voice-role">Senior Marketing Specialist</div></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER INVITE -->
+<section class="footer-invite-wrapper" id="contact">
+<div class="footer-invite">
+  <div class="invite-text reveal">
+    <h2>Come sit with me<br>near the <em>good snacks.</em></h2>
+    <p>
+      If you've made it this far, we probably think alike. 
+      I'm always up for a conversation about design, product, AI, 
+      or whatever's currently breaking my brain in the best way.
+    </p>
+  </div>
+  <div class="invite-links reveal reveal-delay-1">
+    <a href="/cdn-cgi/l/email-protection#d4b1b8b8ad94b1acb5b9a4b8b1fab7bbb9" class="invite-link">
+      <span>Send me an email</span>
+      <span class="invite-link-arrow">→</span>
+    </a>
+    <a href="https://www.linkedin.com/in/mehizon" class="invite-link">
+      <span>Find me on LinkedIn</span>
+      <span class="invite-link-arrow">→</span>
+    </a>
+    <a href="#" class="invite-link">
+      <span>Download CV</span>
+      <span class="invite-link-arrow">→</span>
+    </a>
+  </div>
+</div>
+</section>
+
+<!-- ZELLIGE STRIP -->
+<div class="zellige-strip"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">
+      <div class="nav-avatar"><img src="elly avatar.png" alt="Elly Hizon"></div>
+      Elly Hizon
+    </div>
+    <div class="footer-copy">Principal Product Designer · Sydney · 2026</div>
+  </div>
+</footer>
+
+<!-- BACK TO TOP (shown when story section is in view) -->
+<a href="#" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Parallax background shift on dark sections (nav handled by nav.js)
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.mosaic, .quote-section').forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        const offset = (rect.top / window.innerHeight) * 40;
+        section.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+      }
+    });
+  }, { passive: true });
+
+  // Spotlight glow follows cursor on case study cards
+  document.querySelectorAll('.case-study').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.querySelector('.case-overlay').style.background = `
+        radial-gradient(circle at ${x}% ${y}%, rgba(232,168,56,0.08) 0%, transparent 60%),
+        linear-gradient(to top, rgba(20,16,14,0.96) 0%, rgba(20,16,14,0.5) 55%, rgba(20,16,14,0.1) 100%)
+      `;
+    });
+    card.addEventListener('mouseleave', (e) => {
+      card.querySelector('.case-overlay').style.background = '';
+    });
+  });
+
+  // Back to top: show once user has reached story section, stay until they scroll back above it
+  const backToTop = document.getElementById('back-to-top');
+  const storySection = document.querySelector('.story');
+  const darkSections = document.querySelectorAll('.hero-left, .mosaic, .quote-section, .footer-invite-wrapper, footer');
+  if (backToTop && storySection) {
+    function updateBackToTop() {
+      const rect = storySection.getBoundingClientRect();
+      backToTop.classList.toggle('visible', rect.top < window.innerHeight);
+      // Is the button (bottom-right) over a dark section? Toggle light outline for contrast
+      const x = window.innerWidth - 56;
+      const y = window.innerHeight - 56;
+      let overDark = false;
+      darkSections.forEach(function (el) {
+        const r = el.getBoundingClientRect();
+        if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) overDark = true;
+      });
+      backToTop.classList.toggle('back-to-top-over-dark', overDark);
+    }
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    window.addEventListener('resize', updateBackToTop);
+    updateBackToTop();
+    backToTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Polaroid stack fans in once when story section enters view — never collapses
+  const polaroidStack = document.getElementById('polaroid-stack');
+  if (polaroidStack) {
+    const fanObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          polaroidStack.classList.add('fanned');
+          fanObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+    fanObserver.observe(document.querySelector('.story'));
+  }
+
+  // Polaroid carousel on small screens (same breakpoint as CSS: 900px)
+  const polaroidCarousel = document.querySelector('.polaroid-carousel');
+  const carouselPrev = document.querySelector('.carousel-prev');
+  const carouselNext = document.querySelector('.carousel-next');
+  const POLAROID_WIDTH = 360;
+  const POLAROID_OVERLAP = 90;
+  const CAROUSEL_STEP = POLAROID_WIDTH - POLAROID_OVERLAP;
+  const CAROUSEL_OFFSET_LEFT = 56; /* 3.5rem in px */
+
+  function updateCarousel() {
+    if (!polaroidStack || !polaroidCarousel) return;
+    const isMobile = window.matchMedia('(max-width: 980px)').matches;
+    if (!isMobile) {
+      polaroidStack.style.transform = '';
+      if (carouselPrev) carouselPrev.classList.add('is-hidden');
+      if (carouselNext) carouselNext.classList.add('is-hidden');
+      return;
+    }
+    if (carouselPrev) carouselPrev.classList.remove('is-hidden');
+    if (carouselNext) carouselNext.classList.remove('is-hidden');
+    const index = parseInt(polaroidStack.getAttribute('data-carousel-index') || '0', 10);
+    polaroidStack.style.transform = `translateX(-${CAROUSEL_OFFSET_LEFT + index * CAROUSEL_STEP}px)`;
+    if (carouselPrev) carouselPrev.classList.toggle('is-hidden', index <= 0);
+    if (carouselNext) carouselNext.classList.toggle('is-hidden', index >= 2);
+  }
+
+  if (polaroidStack && carouselPrev && carouselNext) {
+    polaroidStack.setAttribute('data-carousel-index', '0');
+    carouselPrev.addEventListener('click', () => {
+      const current = parseInt(polaroidStack.getAttribute('data-carousel-index') || '0', 10);
+      if (current <= 0) return;
+      const next = current - 1;
+      polaroidStack.setAttribute('data-carousel-index', String(next));
+      updateCarousel();
+    });
+    carouselNext.addEventListener('click', () => {
+      const current = parseInt(polaroidStack.getAttribute('data-carousel-index') || '0', 10);
+      if (current >= 2) return;
+      const next = current + 1;
+      polaroidStack.setAttribute('data-carousel-index', String(next));
+      updateCarousel();
+    });
+    window.addEventListener('resize', updateCarousel);
+    updateCarousel();
+  }
+</script>
+<script src="nav.js"></script>
+</body>
+
+</html>

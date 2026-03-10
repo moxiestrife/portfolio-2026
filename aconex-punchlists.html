@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aconex Punchlists · Elly Hizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="nav.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Shared with portfolio: colors + typography tokens for inner pages */
+    :root {
+      --terracotta: #C8553D;
+      --saffron:    #E8A838;
+      --teal:       #2A7C78;
+      --teal-light: #3FA39E;
+      --plum:       #4A1942;
+      --plum-light: #6B2D6E;
+      --ivory:      #F5EFE0;
+      --warm-white: #FAF6EE;
+      --charcoal:   #1E1A18;
+      --mid:        #6B6460;
+      --border:     rgba(74,25,66,0.12);
+      --font-label: 0.7rem;
+      --font-headline: clamp(2.8rem, 5vw, 4.2rem);
+      --font-body: 1rem;
+      --font-section-title: clamp(2rem, 3vw, 2.8rem);
+      --line-height-headline: 1.05;
+      --line-height-body: 1.7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* Nav: shared global nav (nav.css + nav.js); inner page always shows ivory bar */
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      position: fixed; top: 4.5rem; left: 0; right: 0; z-index: 99;
+      padding: 0.5rem 80px;
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.05em;
+    }
+    .breadcrumb a {
+      color: var(--mid); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--plum); }
+    .breadcrumb-sep { color: var(--border); }
+    .breadcrumb-current { color: var(--charcoal); font-weight: 500; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 80px 80px;
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 80px;
+      align-items: end;
+    }
+
+    .hero-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 24px; height: 2px; background: var(--teal);
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.75rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--plum);
+    }
+
+    .hero-desc {
+      font-size: 1.125rem;
+      color: var(--mid);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex; flex-direction: column; gap: 1.5rem;
+      padding: 2rem;
+      background: var(--ivory);
+      border-radius: 4px;
+      border-left: 3px solid var(--teal);
+    }
+    .meta-item {}
+    .meta-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 0.3rem;
+    }
+    .meta-value {
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-image-full {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 0;
+      padding: 0 80px 80px;
+    }
+    .hero-image-full .img-placeholder {
+      width: 100%;
+      height: 480px;
+      background: linear-gradient(135deg, #2A7C78 0%, #1a5452 40%, #4A1942 100%);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: var(--border);
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 80px;
+    }
+    .divider-inner { height: 1px; background: var(--border); }
+
+    /* ── CONTENT SECTIONS ── */
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 80px;
+    }
+
+    /* Two-column layout: label left, content right */
+    .section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      padding-top: 0.4rem;
+      position: sticky; top: 100px;
+      align-self: start;
+    }
+
+    .section-body h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem; line-height: 1.25;
+      color: var(--charcoal);
+      margin-bottom: 1.25rem;
+    }
+    .section-body h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--plum);
+      margin: 2rem 0 0.75rem;
+    }
+    .section-body p {
+      font-size: 1rem; line-height: 1.8;
+      color: #3D3936;
+      margin-bottom: 1.25rem;
+    }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body strong { color: var(--charcoal); font-weight: 600; }
+
+    /* ── CALLOUT / QUOTE ── */
+    .callout {
+      background: var(--ivory);
+      border-left: 3px solid var(--plum);
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .callout p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--plum);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .callout cite {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--mid);
+      margin-top: 0.75rem;
+      font-style: normal;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STAT ROW ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--ivory);
+      padding: 1.75rem 1.5rem;
+    }
+    .stat-card:first-child { border-radius: 4px 0 0 4px; }
+    .stat-card:last-child { border-radius: 0 4px 4px 0; }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--plum);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-desc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 500;
+      color: var(--mid);
+      line-height: 1.4;
+    }
+
+    /* ── IMAGE PLACEHOLDERS ── */
+    .img-placeholder {
+      width: 100%;
+      background: var(--ivory);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mid);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .img-placeholder.tall { height: 400px; }
+    .img-placeholder.medium { height: 280px; }
+    .img-placeholder.short { height: 200px; }
+
+    .img-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin: 2rem 0;
+    }
+    .img-grid-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px; margin: 2rem 0;
+    }
+    .img-caption {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; color: var(--mid);
+      margin-top: 0.75rem; line-height: 1.5;
+    }
+
+    /* ── PROCESS STEPS ── */
+    .process-steps {
+      display: flex; flex-direction: column; gap: 0;
+      margin: 1.5rem 0;
+    }
+    .process-step {
+      display: flex; gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .process-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; color: var(--border);
+      min-width: 2rem; line-height: 1.4;
+    }
+    .step-content h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--charcoal); margin-bottom: 0.4rem;
+    }
+    .step-content p {
+      font-size: 0.9rem; color: var(--mid);
+      margin: 0; line-height: 1.6;
+    }
+
+    /* ── TAG CHIPS ── */
+    .tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+    .tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: var(--ivory);
+      color: var(--mid);
+      border: 1px solid var(--border);
+    }
+    .tag.highlight {
+      background: var(--plum);
+      color: white;
+      border-color: var(--plum);
+    }
+
+    /* ── NEXT CASE STUDY ── */
+    .next-case {
+      background: var(--charcoal);
+      padding: 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .next-case:hover { background: var(--plum); }
+    .next-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      margin-bottom: 0.75rem;
+    }
+    .next-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: white;
+      line-height: 1.2;
+    }
+    .next-arrow {
+      font-size: 2rem; color: rgba(255,255,255,0.4);
+      transition: transform 0.3s, color 0.3s;
+    }
+    .next-case:hover .next-arrow {
+      transform: translateX(8px);
+      color: white;
+    }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 120px 24px 48px; gap: 40px; }
+      .hero-image-full { padding: 0 24px 48px; }
+      .content { padding: 0 24px; }
+      .section { grid-template-columns: 1fr; gap: 24px; padding: 48px 0; }
+      .section-label { position: static; }
+      .stat-row { grid-template-columns: 1fr; gap: 2px; }
+      .img-grid-2 { grid-template-columns: 1fr; }
+      .img-grid-3 { grid-template-columns: 1fr 1fr; }
+      .next-case { padding: 48px 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV (shared with portfolio; inner page always scrolled/ivory bar) -->
+  <nav>
+    <a href="elly-portfolio.html" class="nav-logo">
+      <div class="nav-avatar"><img src="elly avatar.png" alt="Elly"></div>
+      Elly Hizon
+    </a>
+    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <ul class="nav-links">
+      <li><a href="elly-portfolio.html#work">Work</a></li>
+      <li><a href="elly-portfolio.html#art">Art</a></li>
+      <li><a href="elly-portfolio.html#blog">Blog</a></li>
+      <li><a href="elly-portfolio.html#voices">Kudos</a></li>
+      <li><a href="elly-portfolio.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="elly-portfolio.html">Home</a>
+    <span class="breadcrumb-sep">·</span>
+    <a href="elly-portfolio.html#work">Work</a>
+    <span class="breadcrumb-sep">·</span>
+    <span class="breadcrumb-current">Aconex Punchlists</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left reveal">
+      <div class="hero-tag">Oracle Aconex · 2019</div>
+      <h1>Fixing punchlists by <em>going to the job site</em></h1>
+      <p class="hero-desc">To design a better experience for site supervisors, I didn't start with a whiteboard. I went to an actual Multiplex construction site and spent a day watching how work really gets done.</p>
+      <div class="tags" style="margin-top:2rem">
+        <span class="tag highlight">Ethnographic Research</span>
+        <span class="tag">UX Design</span>
+        <span class="tag">Mobile + Web</span>
+        <span class="tag">Prototyping</span>
+        <span class="tag">Usability Testing</span>
+      </div>
+    </div>
+    <div class="hero-meta reveal" style="transition-delay:0.15s">
+      <div class="meta-item">
+        <div class="meta-label">My Role</div>
+        <div class="meta-value">Senior Product Experience Designer</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Platform</div>
+        <div class="meta-value">iOS, Android, Web</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Company</div>
+        <div class="meta-value">Oracle Aconex</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Duration</div>
+        <div class="meta-value">[X months] · 2019</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Status</div>
+        <div class="meta-value">Shipped ✓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-full reveal">
+    <div class="img-placeholder tall" style="height:480px">
+      [ Hero image — construction site or app screenshot ]
+    </div>
+    <p class="img-caption">Aconex Field — Punchlists on mobile and web. On-site, Multiplex construction site, Melbourne.</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- CONTEXT -->
+    <div class="section reveal">
+      <div class="section-label">Context</div>
+      <div class="section-body">
+        <h2>Aconex is the platform that runs construction projects</h2>
+        <p>Used by construction and engineering teams across <strong>70+ countries</strong>, Aconex manages documents, workflows, and field activity on some of the world's biggest infrastructure projects. Punchlists — the industry term for defect tracking and sign-off — were a core feature, but one that had grown unwieldy over time.</p>
+        <p>Site supervisors were doing their rounds with printed lists, clipboards, and phone photos. The app existed but wasn't being used on-site. That was the signal.</p>
+
+        <div class="callout">
+          <p>"Nobody uses it on site. They do the walk, take photos on their phone, then come back to the office and enter everything manually."</p>
+          <cite>— Site supervisor, Multiplex Melbourne</cite>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <div class="section reveal">
+      <div class="section-label">The Problem</div>
+      <div class="section-body">
+        <h2>We were designing for a version of the job that didn't exist</h2>
+        <p>[Placeholder — describe the gap between what the product assumed and what actually happens on a construction site. Bright sun, gloves, hard hats, no time to type, spotty signal.]</p>
+        <p>[Describe what "doing a punchlist" actually means physically — walking floors, photographing defects, assigning trades, signing off items — and why the existing UI failed each of those moments.]</p>
+
+        <div class="img-grid-2">
+          <div>
+            <div class="img-placeholder medium">[ Before: existing UI screenshot ]</div>
+            <p class="img-caption">The existing punchlist UI — designed for desktop, used on mobile.</p>
+          </div>
+          <div>
+            <div class="img-placeholder medium">[ Field observation photo ]</div>
+            <p class="img-caption">On-site observation, Multiplex Melbourne. Supervisors with clipboards.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESEARCH -->
+    <div class="section reveal">
+      <div class="section-label">Research</div>
+      <div class="section-body">
+        <h2>I went to the site</h2>
+        <p>Rather than relying on stakeholder interviews alone, I arranged an ethnographic field visit to a Multiplex construction site in Melbourne. I shadowed a site supervisor through their full inspection round — from the morning briefing to the final sign-off walk.</p>
+
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h4>Ethnographic field visit</h4>
+              <p>[What you observed. How long. Who you followed. What surprised you.]</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h4>Stakeholder interviews</h4>
+              <p>[Who you spoke to — project managers, site supervisors, subcontractors. Key themes that emerged.]</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h4>Competitive analysis</h4>
+              <p>[What other tools were people using. What they liked about them. Where Aconex had ground to make up.]</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h4>Synthesis & insight mapping</h4>
+              <p>[How you translated field notes into design principles. Key insights that changed the direction.]</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-placeholder tall" style="margin-top:1.5rem">[ Research synthesis — affinity map, insight board, or field notes ]</div>
+        <p class="img-caption">Research synthesis from field visit and stakeholder interviews.</p>
+      </div>
+    </div>
+
+    <!-- KEY INSIGHTS -->
+    <div class="section reveal">
+      <div class="section-label">Key Insights</div>
+      <div class="section-body">
+        <h2>What the site taught us</h2>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-num">[X]</div>
+            <div class="stat-desc">[Key metric from research — e.g. avg time to log a defect manually]</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">[X]%</div>
+            <div class="stat-desc">[Another stat — e.g. supervisors who reverted to clipboard after onboarding]</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">[X]</div>
+            <div class="stat-desc">[Third insight stat — e.g. pain points identified across all sessions]</div>
+          </div>
+        </div>
+
+        <p>[Expand on the 2-3 most important design insights that came from the research. What changed your assumptions? What did you see that you couldn't have guessed from the office?]</p>
+      </div>
+    </div>
+
+    <!-- DESIGN -->
+    <div class="section reveal">
+      <div class="section-label">Design</div>
+      <div class="section-body">
+        <h2>Designing for gloves, sun, and no signal</h2>
+        <p>[Walk through the design decisions. How did the insights translate into specific UI choices? Larger tap targets, offline-first, camera-first flow, etc.]</p>
+
+        <h3>Exploration & iteration</h3>
+        <p>[Describe the ideation phase — sketches, wireframes, early concepts that were explored and discarded.]</p>
+
+        <div class="img-placeholder medium">[ Wireframes or early concept sketches ]</div>
+        <p class="img-caption">Early wireframes exploring the camera-first inspection flow.</p>
+
+        <h3>The solution</h3>
+        <p>[Describe what you landed on. What is the core interaction model? What makes it different from before?]</p>
+
+        <div class="img-grid-3" style="margin-top:1.5rem">
+          <div>
+            <div class="img-placeholder short">[ Screen 1 ]</div>
+            <p class="img-caption">Quick-add from camera</p>
+          </div>
+          <div>
+            <div class="img-placeholder short">[ Screen 2 ]</div>
+            <p class="img-caption">Offline-ready item list</p>
+          </div>
+          <div>
+            <div class="img-placeholder short">[ Screen 3 ]</div>
+            <p class="img-caption">One-tap sign-off</p>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:2rem">
+          <p>[Your key design principle or the "aha" moment that unlocked the right solution.]</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTING -->
+    <div class="section reveal">
+      <div class="section-label">Testing</div>
+      <div class="section-body">
+        <h2>Validated with real users, back on site</h2>
+        <p>[How you tested. Prototype fidelity. Who participated. Where sessions were run — office or back on site?]</p>
+        <p>[Key findings from testing. What passed. What needed iteration. What changed as a result.]</p>
+
+        <div class="img-placeholder medium">[ Usability testing session or prototype screenshot ]</div>
+        <p class="img-caption">[Testing setup description.]</p>
+      </div>
+    </div>
+
+    <!-- OUTCOME -->
+    <div class="section reveal">
+      <div class="section-label">Outcome</div>
+      <div class="section-body">
+        <h2>Shipped — and actually used on site</h2>
+        <p>[Describe what shipped. The final product. Any phased rollout or pilot before full release.]</p>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-num">[X]%</div>
+            <div class="stat-desc">[Outcome metric — e.g. increase in mobile adoption]</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">[X]x</div>
+            <div class="stat-desc">[Second outcome metric]</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">[X]</div>
+            <div class="stat-desc">[Third outcome or qualitative win]</div>
+          </div>
+        </div>
+
+        <p>[Qualitative outcomes — what changed for users. Any quotes from supervisors after the redesign? Stakeholder reactions?]</p>
+
+        <h3>What I'd do differently</h3>
+        <p>[Honest reflection. What you'd change knowing what you know now. Shows maturity and self-awareness.]</p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- NEXT CASE STUDY -->
+  <a href="#" class="next-case">
+    <div>
+      <div class="next-label">Next case study</div>
+      <div class="next-title">NAB Cash Predictions</div>
+    </div>
+    <div class="next-arrow">→</div>
+  </a>
+
+  <script src="nav.js"></script>
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

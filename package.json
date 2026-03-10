@@ -1,0 +1,6 @@
+{
+  "name": "elly-portfolio",
+  "scripts": {
+    "serve": "python -m http.server 8000"
+  }
+}

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aconex ID · Elly Hizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="nav.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --terracotta: #C8553D;
+      --saffron:    #E8A838;
+      --teal:       #2A7C78;
+      --teal-light: #3FA39E;
+      --plum:       #4A1942;
+      --plum-light: #6B2D6E;
+      --ivory:      #F5EFE0;
+      --warm-white: #FAF6EE;
+      --charcoal:   #1E1A18;
+      --mid:        #6B6460;
+      --border:     rgba(74,25,66,0.12);
+      --font-label: 0.7rem;
+      --font-headline: clamp(2.8rem, 5vw, 4.2rem);
+      --font-body: 1rem;
+      --font-section-title: clamp(2rem, 3vw, 2.8rem);
+      --line-height-headline: 1.05;
+      --line-height-body: 1.7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      position: fixed; top: 4.5rem; left: 0; right: 0; z-index: 99;
+      padding: 0.5rem 80px;
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.05em;
+    }
+    .breadcrumb a {
+      color: var(--mid); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--plum); }
+    .breadcrumb-sep { color: var(--border); }
+    .breadcrumb-current { color: var(--charcoal); font-weight: 500; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 80px 80px;
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 80px;
+      align-items: end;
+    }
+
+    .hero-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 24px; height: 2px; background: var(--teal);
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.75rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--plum);
+    }
+
+    .hero-desc {
+      font-size: 1.125rem;
+      color: var(--mid);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex; flex-direction: column; gap: 1.5rem;
+      padding: 2rem;
+      background: var(--ivory);
+      border-radius: 4px;
+      border-left: 3px solid var(--teal);
+    }
+    .meta-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 0.3rem;
+    }
+    .meta-value {
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-image-full {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 0;
+      padding: 0 80px 80px;
+    }
+    .hero-image-full .img-placeholder {
+      width: 100%;
+      height: 480px;
+      background: linear-gradient(135deg, #4A1942 0%, #2A7C78 60%, #1a5452 100%);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: var(--border);
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 80px;
+    }
+    .divider-inner { height: 1px; background: var(--border); }
+
+    /* ── CONTENT SECTIONS ── */
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 80px;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 60px;
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal);
+      padding-top: 0.4rem;
+      position: sticky; top: 100px;
+      align-self: start;
+    }
+
+    .section-body h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem; line-height: 1.25;
+      color: var(--charcoal);
+      margin-bottom: 1.25rem;
+    }
+    .section-body h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--plum);
+      margin: 2rem 0 0.75rem;
+    }
+    .section-body p {
+      font-size: 1rem; line-height: 1.8;
+      color: #3D3936;
+      margin-bottom: 1.25rem;
+    }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body strong { color: var(--charcoal); font-weight: 600; }
+
+    /* ── CALLOUT / QUOTE ── */
+    .callout {
+      background: var(--ivory);
+      border-left: 3px solid var(--plum);
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .callout p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--plum);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .callout cite {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--mid);
+      margin-top: 0.75rem;
+      font-style: normal;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STAT ROW ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--ivory);
+      padding: 1.75rem 1.5rem;
+    }
+    .stat-card:first-child { border-radius: 4px 0 0 4px; }
+    .stat-card:last-child { border-radius: 0 4px 4px 0; }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--plum);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-desc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 500;
+      color: var(--mid);
+      line-height: 1.4;
+    }
+
+    /* ── IMAGE PLACEHOLDERS ── */
+    .img-placeholder {
+      width: 100%;
+      background: var(--ivory);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mid);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .img-placeholder.tall { height: 400px; }
+    .img-placeholder.medium { height: 280px; }
+    .img-placeholder.short { height: 200px; }
+
+    .img-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin: 2rem 0;
+    }
+    .img-grid-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px; margin: 2rem 0;
+    }
+    .img-caption {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem; color: var(--mid);
+      margin-top: 0.75rem; line-height: 1.5;
+    }
+
+    /* ── PROCESS STEPS ── */
+    .process-steps {
+      display: flex; flex-direction: column; gap: 0;
+      margin: 1.5rem 0;
+    }
+    .process-step {
+      display: flex; gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .process-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; color: var(--border);
+      min-width: 2rem; line-height: 1.4;
+    }
+    .step-content h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--charcoal); margin-bottom: 0.4rem;
+    }
+    .step-content p {
+      font-size: 0.9rem; color: var(--mid);
+      margin: 0; line-height: 1.6;
+    }
+
+    /* ── TAG CHIPS ── */
+    .tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+    .tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: var(--ivory);
+      color: var(--mid);
+      border: 1px solid var(--border);
+    }
+    .tag.highlight {
+      background: var(--plum);
+      color: white;
+      border-color: var(--plum);
+    }
+
+    /* ── NEXT CASE STUDY ── */
+    .next-case {
+      background: var(--charcoal);
+      padding: 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .next-case:hover { background: var(--plum); }
+    .next-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      margin-bottom: 0.75rem;
+    }
+    .next-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: white;
+      line-height: 1.2;
+    }
+    .next-arrow {
+      font-size: 2rem; color: rgba(255,255,255,0.4);
+      transition: transform 0.3s, color 0.3s;
+    }
+    .next-case:hover .next-arrow {
+      transform: translateX(8px);
+      color: white;
+    }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 120px 24px 48px; gap: 40px; }
+      .hero-image-full { padding: 0 24px 48px; }
+      .content { padding: 0 24px; }
+      .breadcrumb { padding: 0.5rem 24px; }
+      .section { grid-template-columns: 1fr; gap: 24px; padding: 48px 0; }
+      .section-label { position: static; }
+      .stat-row { grid-template-columns: 1fr; gap: 2px; }
+      .img-grid-2 { grid-template-columns: 1fr; }
+      .img-grid-3 { grid-template-columns: 1fr 1fr; }
+      .next-case { padding: 48px 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="elly-portfolio.html" class="nav-logo">
+      <div class="nav-avatar"><img src="elly avatar.png" alt="Elly"></div>
+      Elly Hizon
+    </a>
+    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <ul class="nav-links">
+      <li><a href="elly-portfolio.html#work">Work</a></li>
+      <li><a href="elly-portfolio.html#art">Art</a></li>
+      <li><a href="elly-portfolio.html#blog">Blog</a></li>
+      <li><a href="elly-portfolio.html#voices">Kudos</a></li>
+      <li><a href="elly-portfolio.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="elly-portfolio.html">Home</a>
+    <span class="breadcrumb-sep">·</span>
+    <a href="elly-portfolio.html#work">Work</a>
+    <span class="breadcrumb-sep">·</span>
+    <span class="breadcrumb-current">Aconex ID</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left reveal">
+      <div class="hero-tag">Aconex · 2018</div>
+      <h1>The same person. <em>Ten different logins.</em></h1>
+      <p class="hero-desc">Aconex is a construction project management platform that helps local and overseas large-scale developers and builders manage their projects. To comply with data sovereignty requirements, it spins up a separate instance for every client. Contractors working across multiple builders end up with multiple usernames, multiple passwords, and no way to manage any of it themselves. Working closely with Product Manager, Steve Saul, and his squad, I helped the team reframe the pitch through storytelling, then designed the identity experience for the new AconexID.</p>
+      <div class="tags" style="margin-top:2rem">
+        <span class="tag highlight">Product Strategy</span>
+        <span class="tag highlight">Stakeholder Storytelling</span>
+        <span class="tag">UX Design</span>
+        <span class="tag">Enterprise Identity</span>
+        <span class="tag">Prototyping</span>
+      </div>
+    </div>
+    <div class="hero-meta reveal" style="transition-delay:0.15s">
+      <div class="meta-item">
+        <div class="meta-label">My Role</div>
+        <div class="meta-value">Senior Product Designer</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Platform</div>
+        <div class="meta-value">Web · Enterprise SaaS</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Company</div>
+        <div class="meta-value">Oracle Aconex</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Year</div>
+        <div class="meta-value">2018</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Status</div>
+        <div class="meta-value">Shipped ✓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO IMAGE -->
+  <div class="hero-image-full reveal">
+    <div class="img-placeholder" style="height:480px">
+      [ Hero image , AconexID screens or identity concept visual ]
+    </div>
+    <p class="img-caption" style="padding:0 0 0 0; margin-top:0.75rem">AconexID , a single identity across all Aconex projects, instances, and integrated tools.</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- PROBLEM -->
+    <div class="section reveal">
+      <div class="section-label">The Problem</div>
+      <div class="section-body">
+        <h2>Four problems. One root cause.</h2>
+        <p>Because each client , Multiplex, John Holland, Lendlease, Fluor Corp , gets their own Aconex instance, a contractor moving between builders accumulates a different identity in each one. Admin-assigned usernames they didn't choose, passwords they can't reset themselves, no way to link accounts. Work across Australian and US projects and the count keeps climbing.</p>
+        <p>There was no self-service, no KYC. Onboarding meant an admin manually creating a login and handing over credentials, which was a security risk built into the process. The fragmentation created four compounding problems:</p>
+
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h4>Poor user experience</h4>
+              <p>Multiple accounts, multiple passwords, no unified view of projects. Users were managing their own identity chaos manually.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h4>Operational inefficiencies</h4>
+              <p>Administrators couldn't link users across instances. Support costs were high. Onboarding new users to projects was needlessly painful.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h4>Increased security risk</h4>
+              <p>Fragmented credentials meant more attack surfaces. Construction firms handle sensitive project data (infrastructure plans, contracts, financial records) that are a target for attackers who exploit weak credential management.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h4>No deep insights</h4>
+              <p>Without a unified identity, Aconex couldn't build meaningful user-level analytics or personalisation. Data was siloed by instance, not by person.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Individually, each problem was significant. Together, they were a competitive liability. Aconex was losing ground to platforms that had already figured this out.</p>
+      </div>
+    </div>
+
+    <!-- MY WORK -->
+    <div class="section reveal">
+      <div class="section-label">My Work</div>
+      <div class="section-body">
+        <h2>Designing the product. Helping reshape the story.</h2>
+        <p>As the Senior Product Designer on the Identity team, I led the UX design for AconexID, working through discovery, concept, user flows, wireframes, and high-fidelity screens alongside the team. I also built the interactive Axure prototype used for stakeholder demonstrations.</p>
+
+        <div class="img-grid-2" style="margin: 2rem 0;">
+          <div>
+            <div class="img-placeholder medium">[ User flow , account linking journey ]</div>
+            <p class="img-caption">User flow mapping the account-linking experience across project instances.</p>
+          </div>
+          <div>
+            <div class="img-placeholder medium">[ Wireframes , AconexID login concept ]</div>
+            <p class="img-caption">Early wireframes for the unified login and identity dashboard.</p>
+          </div>
+        </div>
+
+        <h3>Bringing storytelling into the pitch</h3>
+        <p>Steve and I worked closely together throughout: he brought deep product knowledge, I brought the storytelling structure. The original pitch materials were dense and hard to follow, so together we reframed the narrative: leading with the human problem first, letting the business case follow naturally from there.</p>
+
+        <div class="callout">
+          <p>[ Awaiting LinkedIn recommendation from Steve Saul ]</p>
+          <cite>Steve Saul, Product Manager, Oracle Aconex</cite>
+        </div>
+
+        <p>The result: stakeholder alignment improved significantly. We got the green light to implement AconexID, starting with fixing identity for our US instances as mandated by FedRAMP. The next step in the journey was implementing the new Single Sign-On pages, until Oracle acquired Aconex and brought new identity challenges with them. But that's another story.</p>
+      </div>
+    </div>
+
+    <!-- DESIGN -->
+    <div class="section reveal">
+      <div class="section-label">Design</div>
+      <div class="section-body">
+        <h2>One identity. Three principles.</h2>
+        <p>The AconexID solution was built around three core design tenets, each addressing one of the root problems.</p>
+
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h4>Easier access</h4>
+              <p>A single set of credentials to access all Aconex projects , no more instance logins, no more password proliferation. A guided account-linking flow to bring existing users across cleanly.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h4>Improved security without friction</h4>
+              <p>SSO, two-step verification, and FedRAMP compliance, all designed to meet the highest security standards without making the experience harder for everyday users.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h4>Data linkage for deeper insights</h4>
+              <p>A single identity that connects a person's activity across tools and projects, enabling the kind of cross-project analytics that siloed accounts could never support.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-grid-3" style="margin-top:2rem">
+          <div>
+            <div class="img-placeholder short">[ Login screen , AconexID ]</div>
+            <p class="img-caption">Unified login , one credential for all projects</p>
+          </div>
+          <div>
+            <div class="img-placeholder short">[ Account linking flow ]</div>
+            <p class="img-caption">Guided account-linking for existing users</p>
+          </div>
+          <div>
+            <div class="img-placeholder short">[ Identity dashboard ]</div>
+            <p class="img-caption">Personal identity dashboard concept</p>
+          </div>
+        </div>
+
+        <p style="margin-top:1.5rem">The full interactive prototype , built in Axure , is still accessible and demonstrates the complete user journey from login through account linking to the unified project dashboard.</p>
+        <p><a href="https://2kaudd.axshare.com/" target="_blank" style="color:var(--plum); font-weight:500;">View the Axure prototype →</a></p>
+      </div>
+    </div>
+
+    <!-- OUTCOME -->
+    <div class="section reveal">
+      <div class="section-label">Outcome</div>
+      <div class="section-body">
+        <h2>The initiative kept going. So did the problem.</h2>
+
+        <p>That's the honest version. The problem was real, the design work was solid, and the story I helped Steve tell got it funded. What happened after I left is a different chapter.</p>
+
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-num">1</div>
+            <div class="stat-desc">pitch restructured from data dump to human story , stakeholders finally understood what we were building</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">CPO</div>
+            <div class="stat-desc">Steve advocated to the Chief Product Officer to move me into Product Management based on this work</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">2</div>
+            <div class="stat-desc">products , AconexID and Oracle ID , both seeded by this design and strategy work</div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- NEXT CASE STUDY -->
+  <a href="aconex-punchlists.html" class="next-case">
+    <div>
+      <div class="next-label">Next case study</div>
+      <div class="next-title">Aconex Punchlists</div>
+    </div>
+    <div class="next-arrow">→</div>
+  </a>
+
+  <script src="nav.js"></script>
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
