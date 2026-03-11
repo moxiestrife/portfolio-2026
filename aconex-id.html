@@ -42,23 +42,6 @@
     }
 
     /* ── BREADCRUMB ── */
-    .breadcrumb {
-      position: fixed; top: 4.5rem; left: 0; right: 0; z-index: 99;
-      padding: 0.5rem 80px;
-      background: var(--warm-white);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 0.6rem;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.72rem; letter-spacing: 0.05em;
-    }
-    .breadcrumb a {
-      color: var(--mid); text-decoration: none;
-      transition: color 0.2s;
-    }
-    .breadcrumb a:hover { color: var(--plum); }
-    .breadcrumb-sep { color: var(--border); }
-    .breadcrumb-current { color: var(--charcoal); font-weight: 500; }
-
     /* ── HERO ── */
     .hero {
       padding: 160px 80px 80px;
@@ -364,7 +347,6 @@
       .hero { grid-template-columns: 1fr; padding: 120px 24px 48px; gap: 40px; }
       .hero-image-full { padding: 0 24px 48px; }
       .content { padding: 0 24px; }
-      .breadcrumb { padding: 0.5rem 24px; }
       .section { grid-template-columns: 1fr; gap: 24px; padding: 48px 0; }
       .section-label { position: static; }
       .stat-row { grid-template-columns: 1fr; gap: 2px; }
@@ -380,13 +362,6 @@
   <div id="nav-placeholder"></div>
 
   <!-- BREADCRUMB -->
-  <div class="breadcrumb">
-    <a href="index.html">Home</a>
-    <span class="breadcrumb-sep">·</span>
-    <a href="index.html#work">Work</a>
-    <span class="breadcrumb-sep">·</span>
-    <span class="breadcrumb-current">Aconex ID</span>
-  </div>
 
   <!-- HERO -->
   <section class="hero">
