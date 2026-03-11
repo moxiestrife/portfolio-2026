@@ -5,48 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Elly Hizon · Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="nav.css">
 <style>
-  :root {
-    --terracotta: #C8553D;
-    --saffron: #E8A838;
-    --teal: #2A7C78;
-    --teal-light: #3FA39E;
-    --plum: #4A1942;
-    --ivory: #F5EFE0;
-    --ivory-dark: #EDE4CE;
-    --charcoal: #1E1A18;
-    --warm-white: #FAF6EE;
-    --dusty-rose: #C47B6A;
-    --cobalt: #1B4E72;
-    /*
-      Typography tokens — fluid scale, no html font-size manipulation.
-      clamp(min, preferred, max): min at ~360px, max at ~1400px+
-      All rem values relative to browser default 16px only.
-    */
-    --font-label:        clamp(0.7rem,  0.75vw, 0.85rem);
-    --font-headline:     clamp(1.75rem, 3.2vw,  3.5rem);
-    --font-body:         clamp(0.9rem,  0.85vw, 1.1rem);
-    --font-section-title:clamp(1.5rem,  2.4vw,  2.8rem);
-    --line-height-headline: 1.05;
-    --line-height-body: 1.7;
-  }
-
-  /* Mobile font bump — overrides clamp mins on small screens only */
-  @media (max-width: 640px) {
-    :root {
-      --font-label:         0.8rem;
-      --font-headline:      2.4rem;
-      --font-body:          1.05rem;
-      --font-section-title: 1.9rem;
-    }
-  }
-
   /* Breakpoints: 360 (XXS), 600 (XS), 640 (S), 740 (S landscape), 900 (M), 980, 1100 (L), 1400 (XL); + max-height 500px (compact landscape) */
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
 
   body {
     background: var(--warm-white);
