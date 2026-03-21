@@ -154,17 +154,23 @@ nav.scrolled .nav-toggle {
 
 @media (max-width: 640px) {
   nav {
-    position: fixed; /* ensure nav is the containing block for dropdown */
+    position: fixed;
+    overflow: visible;
+  }
+  /* Dropdown anchors under the bar; fixed + top:auto was misplacing it off-screen */
+  .nav-content {
+    position: relative;
   }
   .nav-toggle {
     display: flex;
   }
   .nav-links {
-    position: fixed;
-    top: auto;
-    left: 0;
-    right: 0;
-    margin-top: 0;
+    position: absolute;
+    top: 100%;
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    width: auto;
+    margin-top: 0.25rem;
     flex-direction: column;
     gap: 0;
     padding: 0.5rem 0;
@@ -178,12 +184,18 @@ nav.scrolled .nav-toggle {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    z-index: 101;
   }
   nav.scrolled .nav-links {
     background: var(--plum) !important;
   }
   nav.nav-open .nav-links {
-    max-height: 320px;
+    /* Cap height so it stays on-screen; scroll if more items later */
+    max-height: min(400px, calc(100dvh - 5.5rem));
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     opacity: 1;
     visibility: visible;
   }
