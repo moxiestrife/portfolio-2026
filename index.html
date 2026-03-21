@@ -1126,17 +1126,54 @@
     border-bottom: 1px solid rgba(30,26,24,0.1);
   }
 
-  .voices-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+  /* ── Kudos carousel ── */
+  .voices-carousel { position: relative; }
+  .voices-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    user-select: none;
+    -webkit-user-select: none;
   }
-
-  @media (max-width: 1100px) {
-    .voices-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .voices-track::-webkit-scrollbar { display: none; }
+  .voices-track .voice-card {
+    flex: 0 0 clamp(280px, 38vw, 420px);
+    scroll-snap-align: start;
   }
+  .voices-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .voices-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--charcoal);
+    background: transparent;
+    color: var(--charcoal);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .voices-btn:hover { background: var(--charcoal); color: var(--ivory); }
+  .voices-btn:disabled { opacity: 0.3; cursor: default; }
+  .voices-dots { display: flex; gap: 0.5rem; }
+  .voices-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(30,26,24,0.2);
+    border: none; cursor: pointer; padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .voices-dot.active { background: var(--charcoal); transform: scale(1.3); }
 
   .voice-card {
     background: var(--warm-white);
@@ -1342,7 +1379,7 @@
     .award-item { min-width: 100%; }
     .skills-grid { grid-template-columns: 1fr; }
     .voices-inner { padding: 5rem 1.25rem; }
-    .voices-grid { grid-template-columns: 1fr; }
+    .voices-track .voice-card { flex: 0 0 85vw; }
     .voice-card { padding: 1.75rem; }
     .case-study-meta { padding: 1.5rem; }
     .case-desc { max-width: 100%; }
@@ -1630,7 +1667,8 @@
     <div class="section-header voices-header reveal">
       <h2 class="section-title">Kudos</h2>
     </div>
-    <div class="voices-grid">
+    <div class="voices-carousel">
+    <div class="voices-track">
 
       <div class="voice-card reveal">
         <div class="voice-quote">"Elly was instrumental in redefining the business' online products and associated goals and processes. From new product launch to web site design; in every case Elly's work was of the highest standard."</div>
@@ -1652,7 +1690,13 @@
         <div class="voice-person"><img class="voice-avatar" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABkAGQDASIAAhEBAxEB/8QAHAAAAAcBAQAAAAAAAAAAAAAAAAMEBQYHCAIB/8QAOhAAAQMDAQUGBAMHBQEAAAAAAQIDEQAEBSEGEjFBUQcTYXGBkRQiobEIFfAWIzJiwdHhJDRCY3KT/8QAGgEAAwEBAQEAAAAAAAAAAAAAAwQFAgABBv/EACQRAAICAQQCAgMBAAAAAAAAAAABAgMRBBIhMTJBE1EUQmFx/9oADAMBAAIRAxEAPwCkm0bgUFDjR6GkuAJCoJFeuJPKu7RP71PlFJ5HTstJbWCpXAUYlDaxoSJ8K9uE/P5igyIA867Jx0t1phBVulRA0HWkrWcuwndbUplIMyJA46acTTjs/gb7anLDGWMhxRmRoEpHMmrJa7Css3ZKKsmy48UylJQYJ6E0vZek8NjFWmnNZS4KZvnVvrLjig6oiSpQMn1kmm0uPMuBVutTRmflJH2qU7QbM5HE3ztjdsKZfR/xIgHxHUHkRTAbZYJQpJkHUHiPEV5GSlymeSrlHhoerDa95/C3WHyZ3y42Qy7zBjgfA8jVJPAh1aTyJqxMi2pDiFEAFI4jgocjUT2nse4eTdNpht2Z8DzpuiSTx9i18W1kZ2NXUjxp8t0w96Uy2oPxCAetSG2G7cSRIA4GjyFohm7Qo4gKMhMUKyek9UCTXVkmVpr1G9vKUR8o0Fe2IUp9KUjQSTQMDQouUwRXjSJRHOD9qPvEajyopSgywXCJCdTWZPCZ6ll4LP8Aw7WzarnIXqEpJS4GpA10E/2rQTCStvUx08Kyv2KbSO7P4/OvQtYXdshpCESVLckADjGoB4Grp7O9rl526ebN086lEpWlxkoLagJImADHhNSJKW9yfKLtEouuMFww7tW2TbzuJU8020m+tgVsrMDeHEoJ6H6HXrWY8wlCXC6ykB1BgpPUcQfYir/2rGTu/jruxJceCHO571RKQoDQADgSeGoHMnSDTGa2T2wvLa6zGQsmkugBTyWtSvjJAEgkACSDr58TVvat2eAd8HJ7Ussri/vEuOlpqdwmQDxSeY/X9a4eshfY563BIURvtnoRSXJIUm77xv5pPzDr4+Yp2xaoQ0og728InmDTe7qSJuzuLK7aaLeRShXEKg1I1IAf+UcqQZ+37jOpO6B3hKoHWSP6T604MHefM9KfTzHJPlHDaO0jThQowjWhXGSepBSSmPlIB9a6sd5LqVJEgkg1B29u0mN9mIEcKPa26Zbj93px4UPZIPvRYVy2SEqAkRSa7QPy9z5SZSRoJM1FWu0KycSELCgeA+WnxWWa7tlLrgSHSCgRJPOsSg0nk3Gab4LM/DczaOPZXF3qEqcd7p0pUAZABEjyIHuKvZixtra8bYs0pBAKlCeUED71kbF7T/s32g47LFwsWoIYeUOAQuASfAEg+laTdvVt2TdwG03bVwQXHg+UFAIMHQExwGnXpUW6LUk10z6LRSVkVHHKFWzj7NnlX7S5HyqUYMSJB1Phxo7bHuTaEMFKgeQpguLpdiUosLa0cfendCVLWQeqiUiB1OtHuFTVmDdutuP6bykApRMawCeFZnFxSQ84uMstYM/drGzrFrk27plpLRfJKwkQCZ1JHXXlUVxjJcQwQEgAqB8Yg1Nu2LaG0u801j7ZQWq2MuKHAE8vMASfMVDLZ0JsA0DC0Ikx4z/UH2p6tPYskHUtfK8EV26ZDWatVJcQ4lYKvlMgeB8eNcWf+5X5Um2hSr84QpUQYIIgToDB96U2Y/1Kx4VTh4Ij2ebYqjwoV0eNCtGSKIxylAEuKE/9ZoxGJCiJfV/8jWsxhsWHW2/gLc72oG4KUt4TEpfLZx9vIIH8Aoji/sGZNt8LblQ3rxQM8mjUmtFNv5pDjrivhWEpSkkQYABOnWT7kdK02jA4ZsFasdbADUkoHCst5XJDM7V3qrdAbaub0qbCBG6iSAI8BFCti9rCVvEkSzauxbvsUXSAkuAQRoOAIFO/Yj2qPYS5b2Z2oUpzFb3dM3KjJYHABXVHjxA8ODftRu/s4ptJgbwAI5DWoPm7csZVKhoHmwsmOChpIqdGMbIOMkVFZOqalF4NxKXsxaY03yLi2S2UbwcCxBEToelV1tPlb3JtuIx4Va2IBJfUIUofyjlPIn0HOop2Jlu+xQZfsmVrtlRvkdRIIn1qa7ZtrRjC02ggrMGDJ8BU9LbLDLXySshuz2Z2ybaX9oHG2t4pQSSSZknrSCwuw7dXKQpJCHFJT5Az9iakGaQxiba6uFAd8SST0MQBP641XOBu1ouy4SYWqSepqpXHdBtEGyWJklabxeWIaug4i4ZUTKCASOEGQQeVEvWyGrtZZSUpAggmTygzA+lNuaKGMip1gEKICiAogGRxEUhazt9bndKkOtkk7qxM+p1+tMVp446FbWs/0f4oU2IzrCkBTlu4lXMJUIoUbDAZNV2su5llKdQlINGuuj81UJjUCKj2K2ibtnw67brUYjQivXc4HL03At1AEzE61p2rjk5Rf0SDtEv04rYjK5Ar3Ci0Xun+YiE/UisrbGWyncoLgiEMgqJPWDFXJ287Ti87Pzj2mnG1XFw2kkmAQJJ+oFVng0N2OFLZILroBnnAIn7ge9B1Nq2cewlMG5pv0PGbukuYq3SVSC4STHICozePIvr5lK1hpcS2SdASSYPSRFL8iucJYurMpAJIJjenl6x7URs1s5f7RvpFo0HX1uEpTO6IAkz9B5mkqkowbbHZZlNJFsfh9v2ba/urK8KmypAAniIP+dPOrO2rK7XBm7VwSFRvjWSYEDqAKovZF57ZLbu0ayLLiQ24G3UrgFAOmp5xoaurtgvUp2cbcbUA06QAOs8CPY+1IXRe9NdMsaexfC4vtGc+0x/ebDYkb6iSOZEzUEtkd24lJ0KtPAGZ+01N9qkfH59SArdQ2CArkI1J9B9YqJ3DU7ymgQlC4QT1nQ+4qnp2lDBFty5NnmUWpxVu4qSS3B8CJmmpz5zvdQCPD9a08XoDlgXECQRvg/cekGmYkFsHj/anKuhO7sccWq2NurvW7MqCo/fLIVEDxoU0lIkk8zQomP6CyaqZxogEilTeOHCDTy1baDSlDdsJ/hpDLGcFJdvYatEYhhR4qWsifFIn7+9RfEXdo6hLjqiABuKBHDjr71IfxKup/P7FgKUC1bAkRpKlEx7AGqzN5Fu0llxLc6rJOogR+vOiOvfBHkJ7ZPJINpr21VirS2tpKmjJB6a/3H1qw+zTI22xuHcy96wV3b7TZtGFgArLg3k+kCSegHOBVS7K497NbR4/GJKlO3ty2wCTJlagke0/StP7a9j7+a2pTk3jcHHWIRbW9lauBtabdCAlKkEyCuQSQYkERW/w99eEdHWqu1NlVbduXFzi3cxfXLIv33g4AhQUSSYgkaAAcgdNOPKWbRZe5vuzHAPXW93yyUydJSARPjwJqd4fsK2evibhvLXFzbpIhFwTvpI4pUCJB8DS3tJ2JY/Jg20Ui3x7KIQlJACFFQJnjoQCT0BpSWju4jjhex5a+hNvdy/Rl+2u0XOR3XiQlwlKiTESROvLgaSrQ0UuJQDHxK0AcSQJNGZC3t8dnb/HvqeUba4U2S0QoEgxIPD1pMu4smUy0t5O6VqHeJEFR01g8R5USKxx7AtuXK6E9sgGyumDqlpxW7/4kgj6VG1yEAExpTtd3qbW2Ww2SVuJhRPED/M0yOKmB603Umsv7E7WuF9AUsk6UK4160KMBN0NoT0o1KRNChUwbM3fiOWV7cPtrSlQDLCUGNUgpnT1J4zVSAmR50KFPVeIvPssf8P6Qvth2XSoSPjgfYE/cVvuYSCAJoUKdo8H/olqPNHbDTRSXg2lLhTqoCCaY9pXCyi6cSEk/BuEhQkHdEgeWpoUKJLoDDyMR5mxt2bm9cQk73fITJPIpJP1qPZJCfiWUESkpKz5jhQoVFXkXv1Ixdkl1ROp3jRKuNChTq6EX2A8aFChXpx//9k=" alt="Jasmina Majdis"><div class="voice-person-text"><div class="voice-name">Jasmina Majdis (Dugalic)</div><div class="voice-role">Senior Marketing Specialist</div></div></div>
       </div>
 
+    </div><!-- /.voices-track -->
+    <div class="voices-nav">
+      <button class="voices-btn" id="voices-prev" aria-label="Previous">←</button>
+      <div class="voices-dots" id="voices-dots"></div>
+      <button class="voices-btn" id="voices-next" aria-label="Next">→</button>
     </div>
+    </div><!-- /.voices-carousel -->
   </div>
 </section>
 
@@ -1824,6 +1868,96 @@
     window.addEventListener('resize', updateCarousel);
     updateCarousel();
   }
+
+  // Kudos carousel
+  (function () {
+    const track = document.querySelector('.voices-track');
+    const prevBtn = document.getElementById('voices-prev');
+    const nextBtn = document.getElementById('voices-next');
+    const dotsContainer = document.getElementById('voices-dots');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const cards = Array.from(track.querySelectorAll('.voice-card'));
+    let current = 0;
+
+    // Build dots
+    cards.forEach(function (_, i) {
+      const dot = document.createElement('button');
+      dot.className = 'voices-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+      dot.addEventListener('click', function () { goTo(i); });
+      dotsContainer.appendChild(dot);
+    });
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, cards.length - 1));
+      const card = cards[current];
+      track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+      dotsContainer.querySelectorAll('.voices-dot').forEach(function (d, i) {
+        d.classList.toggle('active', i === current);
+      });
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === cards.length - 1;
+    }
+
+    prevBtn.addEventListener('click', function () { goTo(current - 1); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+    // Sync dots on manual swipe
+    track.addEventListener('scroll', function () {
+      let closest = 0, minDist = Infinity;
+      cards.forEach(function (card, i) {
+        const dist = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft);
+        if (dist < minDist) { minDist = dist; closest = i; }
+      });
+      if (closest !== current) {
+        current = closest;
+        dotsContainer.querySelectorAll('.voices-dot').forEach(function (d, i) {
+          d.classList.toggle('active', i === current);
+        });
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === cards.length - 1;
+      }
+    }, { passive: true });
+
+    // Drag to scroll on desktop — disable snap while dragging, snap to nearest card on release
+    let isDown = false, startX, scrollLeft, hasDragged = false;
+    track.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      isDown = true; hasDragged = false;
+      track.style.cursor = 'grabbing';
+      track.style.scrollSnapType = 'none';
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+    function endDrag() {
+      if (!isDown) return;
+      isDown = false;
+      track.style.cursor = 'grab';
+      track.style.scrollSnapType = '';
+      if (hasDragged) {
+        // find nearest card and snap to it smoothly
+        let closest = 0, minDist = Infinity;
+        cards.forEach(function (card, i) {
+          const dist = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft);
+          if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        goTo(closest);
+      }
+    }
+    track.addEventListener('mouseleave', endDrag);
+    track.addEventListener('mouseup', endDrag);
+    track.addEventListener('mousemove', function (e) {
+      if (!isDown) return;
+      e.preventDefault();
+      hasDragged = true;
+      const x = e.pageX - track.offsetLeft;
+      track.scrollLeft = scrollLeft - (x - startX) * 1.2;
+    });
+    track.style.cursor = 'grab';
+
+    goTo(0);
+  })();
 </script>
 <script src="nav.js"></script>
 </body>
