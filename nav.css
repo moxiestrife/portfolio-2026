@@ -145,10 +145,17 @@ nav.scrolled .nav-toggle {
   }
 }
 
-/* Phone landscape: match hero-left padding so logo aligns with content edges */
+/* Phone landscape: compact nav bar */
 @media (max-height: 500px) {
   .nav-content {
-    padding: 0.6rem 1.5rem;
+    padding: 0.5rem 1.25rem;
+  }
+}
+
+/* Phone landscape + narrow width: keep dropdown anchored under the compact bar */
+@media (max-width: 640px) and (max-height: 500px) {
+  nav.nav-open .nav-links {
+    max-height: min(280px, calc(100dvh - 4rem));
   }
 }
 

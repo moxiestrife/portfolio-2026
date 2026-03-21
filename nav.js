@@ -7,15 +7,40 @@
   const placeholder = document.getElementById('nav-placeholder');
   if (!placeholder) return;
 
+  // Same markup as nav.html — used when fetch fails (opening index.html via file:// blocks fetch)
+  var navHtmlFallback =
+    '<nav>' +
+    '  <div class="nav-content">' +
+    '    <a href="index.html" class="nav-logo">' +
+    '      <div class="nav-avatar"><img src="elly avatar.png" alt="Elly"></div>' +
+    '      Elly Hizon' +
+    '    </a>' +
+    '    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>' +
+    '    <ul class="nav-links">' +
+    '      <li><a href="index.html">Home</a></li>' +
+    '      <li><a href="index.html#about">About</a></li>' +
+    '      <li><a href="index.html#work">Work</a></li>' +
+    '      <li><a href="index.html#voices">Kudos</a></li>' +
+    '      <li><a href="index.html#contact">Contact</a></li>' +
+    '    </ul>' +
+    '  </div>' +
+    '</nav>';
+
   fetch('nav.html')
-    .then(function (res) { return res.text(); })
+    .then(function (res) {
+      if (!res.ok) throw new Error('nav.html not ok');
+      return res.text();
+    })
     .then(function (html) {
       placeholder.outerHTML = html;
       initNav();
     })
     .catch(function () {
-      // fetch failed (e.g. file:// protocol) — nav.html must be served via HTTP
-      console.warn('nav.html could not be fetched. Make sure you are running a local server.');
+      console.warn(
+        'nav.html could not be loaded (common when opening the file directly). Using embedded nav.'
+      );
+      placeholder.outerHTML = navHtmlFallback;
+      initNav();
     });
 
   function initNav() {
